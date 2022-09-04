@@ -2,6 +2,7 @@
 import * as marked from "marked";
 const route = useRoute();
 const productStore = useProductStore();
+const cartStore = useCartStore();
 
 const { data: product } = await useAsyncData(
   `product${route.params.id}`,
@@ -20,6 +21,7 @@ const description = computed(() =>
 );
 
 function handleAddToCart(product) {
+  cartStore.addToCart(product);
   useAlertsStore().success(product.fields.name + " added to cart");
 }
 </script>
@@ -36,7 +38,7 @@ function handleAddToCart(product) {
           <h1 class="text-2xl">{{ product?.fields.name }}</h1>
           <h2>
             <ProductPrice :price="product.fields.price" />
-            <ProductHeat :heatLevel="product.fields.heatLevel" />
+            <ProductHeat :heatLevel="product.fields.heatLevel[0]" />
           </h2>
           <div class="prose prose-sm">
             <p>{{ product.fields.summary }}</p>
